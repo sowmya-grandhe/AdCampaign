@@ -1,0 +1,72 @@
+AdServer is a Dynamic Maven Web Application 
+
+Steps to import and deploy the application:
+------------------------------------------
+1) Import the project as an Existing Maven project in Eclipse.
+2) Configure the connection to Apache Tomcat server in Eclipse.
+3) Right click on the project --> Properties--> Targeted Runtimes --> Select the server checkbox for Apache Tomcat
+4) Right click on the project --> Properties --> Java Compiler (Make sure that the compiler compliance level is set to 1.8
+5) Right click on the project --> Run As --> Maven Install (This will create the war file)
+6) Right click on the project -->Run As --> Run On Server (This will deploy the application on the server)
+
+Steps to run the application:
+----------------------------
+1) Install "Advanced Rest Client" for Chrome
+2) Open it for testing the functional requirements
+3) Make sure that Content-Type: application/json is set in the headers
+
+Test Scenario 1: For Creating ad campaign for a partner and enforcing that each partner will not have more than one active ad campaign
+-------------------------------------------------------------------------------------------------------------------------------------
+URL to use: http://localhost:8080/adserver/ad
+HTTP method: POST
+Example payload: 
+{
+ "partner_id": "partner_1",
+ "duration": "120",
+ "ad_content": "partner_1 ad campaign data"
+}
+ 
+Test Scenario 2: For fetching the ad campaign data for the specified partner. 
+-----------------------------------------------------------------------------
+URL to use: http://localhost:8080/adserver/ad/<partner_id>
+HTTP method: GET
+
+Bonus Cases Solutions: 
+---------------------
+---------------------
+
+1)  Discuss the advantages and disadvantages of your persistence mechanism
+--------------------------------------------------------------------------
+Solution:
+I used HashMap for persisting the data in the memory. 
+Advantages: Very efficient in speed for fetching the data. map.get("partner_id) will compute the hashcode on the "partner_id" 
+            and searches the data only in the bucket associated with this hashcode and retrieves it . So basically it fetches 
+            data without iterating through all the elements in the Map and so it is faster.
+Disadvantages: This is just an in-memory data structure and not stored in any persistent data store. 
+               If the server is restarted, all the previously entered data will be lost. 
+               So the persistence is valid only till the time the server is not restarted.
+               
+2)  Add a URL to return a list of all campaigns as JSON.
+-------------------------------------------------------
+Solution:               
+URL to use: http://localhost:8080/adserver/ad/all   (This will return all the ad campaigns for all partners (active and inactive ads))
+HTTP method: GET
+
+3)Add support for multiple ad campaigns per partner.
+---------------------------------------------------
+Solution:
+URL to use: http://localhost:8080/adserver/ad/multiple (Allows creating multiple ads for each partner)
+HTTP method: POST
+Example payload: 
+{
+ "partner_id": "partner_2",
+ "duration": "120",
+ "ad_content": "partner_2 ad campaign data"
+}
+
+URL to use: http://localhost:8080/adserver/ads/<partner_id>  (This will return all the active ad campaigns for specified partner)
+HTTP method: GET
+
+
+
+
