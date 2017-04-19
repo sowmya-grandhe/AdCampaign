@@ -1,0 +1,239 @@
+Demonstrated the testing done on the ad server application through the below mentioned test cases.
+I have mentioned for each scenario the input which I provided and the output received from the Advanced REST client.
+For each functional requirement, tried to cover the testing for all the possible cases as below:   
+--------------------------------------------------------
+FUNCTIONAL REQUIREMENT: Create Ad Campaign via HTTP POST
+--------------------------------------------------------
+---------------------------------------------------------
+TEST_CASE_1:  This case is to create ad campaign for partner with name "partner_1".
+----------
+ INPUT URL: http://localhost:8080/adserver/ad
+ HTTP method: POST	
+ INPUT PAYLOAD: 
+ {
+ "partner_id": "partner_1',
+ "duration": "240",
+ "ad_content": "partner_1 ad content"
+}
+
+OUTPUT:
+
+{
+"responseStatus": "SUCCESS",
+"message": "Ad Campaign created successfully"
+}
+----------------------------------------------
+TEST_CASE_2:  This case is to create ad campaign for partner with name "partner_1" again before 240 seconds. (i.e when an active ad campaign exists for partner_1) 
+----------
+ INPUT URL: http://localhost:8080/adserver/ad
+ HTTP method: POST	
+ INPUT PAYLOAD: 
+ {
+ "partner_id": "partner_1',
+ "duration": "240",
+ "ad_content": "partner_1 ad content"
+}
+
+OUTPUT:
+{
+"responseStatus": "ERROR",
+"message": "An active ad campaign for this partner is already existing. Cannot create more then one active ad campaign for this partner "
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
+TEST_CASE_3:  This case is to create ad campaign for partner with name "partner_2"
+----------
+ INPUT URL: http://localhost:8080/adserver/ad
+ HTTP method: POST	
+ INPUT PAYLOAD: 
+ {
+ "partner_id": "partner_2',
+ "duration": "360",
+ "ad_content": "partner_2 ad content"
+}
+
+OUTPUT:
+{
+"responseStatus": "SUCCESS",
+"message": "Ad Campaign created successfully"
+}
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+TEST_CASE_4:  This case is to create ad campaign for partner with name "partner_3"
+----------
+ INPUT URL: http://localhost:8080/adserver/ad
+ HTTP method: POST	
+ INPUT PAYLOAD: 
+ {
+ "partner_id": "partner_3',
+ "duration": "360",
+ "ad_content": "partner_3 ad content"
+}
+
+OUTPUT:
+{
+"responseStatus": "SUCCESS",
+"message": "Ad Campaign created successfully"
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
+TEST_CASE_5:  This case is to create ad campaign for partner with name "partner_1" again after 240 seconds. 
+              (Then it allows to create as the previously created one is not active after 240 seconds from the creation time )
+----------
+ INPUT URL: http://localhost:8080/adserver/ad
+ HTTP method: POST	
+ INPUT PAYLOAD:
+ INPUT: 
+ {
+ "partner_id": "partner_1',
+ "duration": "240",
+ "ad_content": "partner_1 ad content"
+}
+
+OUTPUT:
+{
+"responseStatus": "SUCCESS",
+"message": "Ad Campaign created successfully"
+}
+-------------------------------------------------------------------------------------------------------------------------
+FUNCTIONAL REQUIREMENT: Fetch Ad Campaign for a Partner
+--------------------------------------------------------
+---------------------------------------------------------
+TEST_CASE_1:  This case is to fetch ad campaign for partner with name "partner_1" before 240 seconds from its creation time (i.e when an active ad exists)
+----------
+ INPUT URL:  http://localhost:8080/adserver/ad/partner_1
+ HTTP Method: GET
+ 
+OUTPUT:
+{
+"partner_id": "partner_1",
+"duration": 240,
+"ad_content": "partner_1 ad content"
+}
+----------------------------------------------
+TEST_CASE_2:  This case is to fetch campaign for partner with name "partner_5" for which ad campaign was not created.  
+----------
+ INPUT URL:  http://localhost:8080/adserver/ad/partner_5
+ HTTP Method: GET
+
+OUTPUT:
+{
+"responseStatus": "ERROR",
+"message": "No active ad campaign exists for the specified partner"
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
+TEST_CASE_3:  This case is to fetch ad campaign for partner with name "partner_1" after 240 seconds from its creation time (it is no more active now)
+----------
+ INPUT URL:  http://localhost:8080/adserver/ad/partner_1
+ HTTP Method: GET
+
+OUTPUT:
+{
+"responseStatus": "ERROR",
+"message": "No active ad campaign exists for the specified partner"
+}
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------
+BONUS FUNCTIONAL REQUIREMETS:
+-----------------------------------------------------------------------------------
+FUNCTIONAL REQUITEMENT:  Add a URL to return a list of all campaigns as JSON.
+-----------------------------------------------------------------------------
+ INPUT URL:  http://localhost:8080/adserver/ad/all
+ HTTP Method: GET
+
+OUTPUT:  (This returns all active and inactive ad campaigns for all partners)
+[
+  {
+"partner_id": "partner_1",
+"duration": 240,
+"ad_content": "partner_1 ad content"
+},
+  {
+"partner_id": "partner_2",
+"duration": 360,
+"ad_content": "partner_2 ad content"
+},
+  {
+"partner_id": "partner_3",
+"duration": 360,
+"ad_content": "partner_3 ad content"
+}
+]
+---------------------------------------------------------------------------------------
+FUNCTIONAL REQUIREMENT: Add support for multiple ad campaigns per partner.
+--------------------------------------------------------------------------
+TEST_CASE_1:  This case is to create ad campaign for partner with name "partner_1".
+----------
+ INPUT URL: http://localhost:8080/adserver/ad/multiple
+ HTTP method: POST
+ INPUT PAYLOAD: 
+ {
+ "partner_id": "partner_1',
+ "duration": "240",
+ "ad_content": "partner_1 ad content"
+}
+
+OUTPUT:
+{
+"responseStatus": "SUCCESS",
+"message": "Ad Campaign created successfully"
+}
+----------------------------------------------
+TEST_CASE_2:  This case is to create one more active ad campaign for partner with name "partner_1" again before 240 seconds. (i.e when an active ad campaign exists for partner_1) 
+----------
+ INPUT: 
+ {
+ "partner_id": "partner_1',
+ "duration": "240",
+ "ad_content": "partner_1 second ad content"
+}
+
+OUTPUT:
+{
+"responseStatus": "SUCCESS",
+"message": "Ad Campaign created successfully"
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
+TEST_CASE_3:  This case is to create ad campaign for partner with name "partner_2"
+----------
+ INPUT: 
+ {
+ "partner_id": "partner_2',
+ "duration": "360",
+ "ad_content": "partner_2 ad content"
+}
+
+OUTPUT:
+{
+"responseStatus": "SUCCESS",
+"message": "Ad Campaign created successfully"
+}
+------------------------------------------------------------------------------------------------------------
+FUNCTIONAL REQUIREMENT: Fetch multiple active ad campaigns for a partner
+--------------------------------------------------------------------------
+TEST_CASE_1:  This case is to fetch when multiple ad campaigns are active for partner with name "partner_1".
+----------
+ INPUT URL: http://localhost:8080/adserver/ads/partner_1
+ HTTP method: GET
+ 
+OUTPUT:
+[
+  {
+"creationTime": 1492569149744,
+"adCampaign": {
+"partner_id": "partner_1",
+"duration": 240,
+"ad_content": "partner_1 ad content"
+}
+},
+  {
+"creationTime": 1492569350850,
+"adCampaign": {
+"partner_id": "partner_1",
+"duration": 240,
+"ad_content": "partner_1 second ad content"
+}
+}
+]
+
+
