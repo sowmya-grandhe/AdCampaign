@@ -181,7 +181,9 @@ OUTPUT:
 ----------------------------------------------
 TEST_CASE_2:  This case is to create one more active ad campaign for partner with name "partner_1" again before 240 seconds. (i.e when an active ad campaign exists for partner_1) 
 ----------
- INPUT: 
+ INPUT URL: http://localhost:8080/adserver/ad/multiple
+ HTTP method: POST
+ INPUT PAYLOAD:  
  {
  "partner_id": "partner_1',
  "duration": "240",
@@ -196,7 +198,9 @@ OUTPUT:
 -----------------------------------------------------------------------------------------------------------------------------------------
 TEST_CASE_3:  This case is to create ad campaign for partner with name "partner_2"
 ----------
- INPUT: 
+ INPUT URL: http://localhost:8080/adserver/ad/multiple
+ HTTP method: POST
+ INPUT PAYLOAD:  
  {
  "partner_id": "partner_2',
  "duration": "360",
