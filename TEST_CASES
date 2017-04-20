@@ -37,7 +37,7 @@ TEST_CASE_2:  This case is to create ad campaign for partner with name "partner_
 OUTPUT:
 {
 "responseStatus": "ERROR",
-"message": "An active ad campaign for this partner is already existing. Cannot create more then one active ad campaign for this partner "
+"message": "Only one active campaign can exist for a given partner"
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
 TEST_CASE_3:  This case is to create ad campaign for partner with name "partner_2"

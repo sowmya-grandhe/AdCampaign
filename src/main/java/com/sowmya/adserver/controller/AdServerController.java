@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sowmya.adserver.bean.AdCampaign;
 import com.sowmya.adserver.bean.AdCampaignWrapper;
 import com.sowmya.adserver.bean.Status;;
 
+@EnableWebMvc
 @RestController
 public class AdServerController {
 
@@ -47,9 +49,7 @@ public class AdServerController {
 				adCampaignMap.put(partnerId, newAdCampaignWrapper);
 			} else {
 				return new Status("ERROR",
-						"An active ad campaign for this partner"
-								+ " is already exisiting. Cannot create more then one active"
-								+ " ad campain for this partner ");
+						"Only one active campaign can exist for a given partner");
 			}
 		} else {
 			AdCampaignWrapper newAdCampaignWrapper = new AdCampaignWrapper(System.currentTimeMillis(), adCampaign);
